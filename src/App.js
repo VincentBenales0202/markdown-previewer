@@ -1,25 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import defaultValue from './Component/DefaultValue'
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const marked = require('marked')
+marked.setOptions({
+  breaks: true
+});
+class App extends Component {
+  state = {
+    markdown: defaultValue
+  }
+
+  updateMarkdown = (markdown) => {
+    this.setState({markdown})
+  }
+  
+  render() {
+    const {markdown} = this.state
+    return(
+      <React.Fragment>
+        <div id="wrapper">
+          <div className="editor-wrapper"> 
+            <div className="toolbar"> 
+              <h2>Editor</h2>
+            </div>
+            <textarea 
+              id="editor"
+              placeholder="Enter Markdown" 
+              value={markdown}
+              onChange={(event) => this.updateMarkdown(event.target.value)}
+            />
+          </div>
+          <div className="preview-wrapper">
+            <h2 className="previewer">Previewer</h2>
+            <div id="preview" dangerouslySetInnerHTML={{__html: marked(markdown)}}>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    )
+  }
 }
 
-export default App;
+export default App
